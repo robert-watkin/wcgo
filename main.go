@@ -12,6 +12,11 @@ import (
 	"strings"
 )
 
+type wordCount struct {
+	word  string
+	count int
+}
+
 func main() {
 	// var iFlag = flag.String("i", "", "Input a file name")
 	flag.Parse()
@@ -57,29 +62,35 @@ func main() {
 			// fmt.Printf("Found %d %s\n", wordCounts[word], word)
 		}
 	}
-	fmt.Println("finished counting...")
 
 	// check for any errors that may have occurred
 	if err := scanner.Err(); err != nil {
 		fmt.Fprintln(os.Stderr, "reading standard input:", err) // TODO what is diff between Fprintln and Println
 	}
 
-	// count results
-	countCmp = func(a, b int) int {
-		return cmp.Compare(a, b)
+	// order based on count
+	// create comparison function
+	countCmp := func(a, b wordCount) int {
+		res := cmp.Compare(b.count, a.count)
+		if res == 0 {
+			return cmp.Compare(b.word, a.word)
+		} else {
+			return cmp.Compare(b.count, a.count)
+		}
 	}
 
-	wordCountsSlice := make([]struct {
-		word  string
-		count int
-	}, len(wordCountsMap))
-	
+	// copy the map into a slice
+	wordCountsSlice := make([]wordCount, 0, len(wordCountsMap))
 	for word, count := range wordCountsMap {
-		wordCountsSlice = append(wordCountsSlice, {word, count})
+		wordCountsSlice = append(wordCountsSlice, wordCount{word, count})
 	}
 
-	slices.Sort(wordCountsSlice)
+	// sort the slice based on the comparison function
+	slices.SortFunc(wordCountsSlice, countCmp)
 
+	for _, x := range wordCountsSlice {
+		fmt.Printf("%d %s\n", x.count, x.word)
+	}
 	fmt.Println("exiting...")
 	os.Exit(1)
 }
