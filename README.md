@@ -10,9 +10,15 @@ go install wcgo
 
 wcgo README.md
 
+## usage
+
+./wcgo --min <number> --top <number> <file>
+
 ## example
 
 ./wcgo README.md
+./wcgo --min 5 --top 10 README.md
+./wcgo // read from stdin
 
 ## testing
 
