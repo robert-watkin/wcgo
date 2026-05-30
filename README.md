@@ -11,4 +11,11 @@ go install wcgo
 wcgo README.md
 
 ## example
+
 ./wcgo README.md
+
+## testing
+
+go test // run tests
+go test -v // verbose
+

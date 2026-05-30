@@ -52,7 +52,7 @@ func main() {
 		defer data.Close() // data closed at the end of main
 	}
 
-	wordCountsMap, err := count(reader, caseSensitiveFlag)
+	wordCountsMap, err := Count(reader, caseSensitiveFlag)
 	// call to count with error handling
 	if err != nil {
 		fmt.Fprintln(os.Stderr, "reading standard input:", err) // TODO what is diff between Fprintln and Println
@@ -90,7 +90,7 @@ func main() {
 	os.Exit(1)
 }
 
-func count(r io.Reader, caseSensitiveFlag *bool) (map[string]int, error) {
+func Count(r io.Reader, caseSensitiveFlag *bool) (map[string]int, error) {
 	wordCountsMap := make(map[string]int)
 
 	// create a scanner to loop through each line
