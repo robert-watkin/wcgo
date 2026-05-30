@@ -92,18 +92,16 @@ func main() {
 	// copy the map into a slice
 	wordCountsSlice := make([]wordCount, 0, len(wordCountsMap))
 	for word, count := range wordCountsMap {
-		wordCountsSlice = append(wordCountsSlice, wordCount{word, count})
+		if *minFlag <= count {
+			wordCountsSlice = append(wordCountsSlice, wordCount{word, count})
+		}
 	}
 
 	// sort the slice based on the comparison function
 	slices.SortFunc(wordCountsSlice, countCmp)
 
-	if *topFlag != 0 {
+	if *topFlag != 0 && *topFlag <= len(wordCountsSlice) {
 		wordCountsSlice = wordCountsSlice[:*topFlag]
-	}
-
-	if *minFlag != 0 {
-		wordCountsSlice = wordCountsSlice[0:*minFlag]
 	}
 
 	for _, x := range wordCountsSlice {
